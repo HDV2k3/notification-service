@@ -36,6 +36,7 @@ mail:
   name: ${MAIL_NAME}
   api: ${API_MAIL}
 
+
 feign:
   hystrix:
     enabled: true  # Bật Hystrix cho Feign
