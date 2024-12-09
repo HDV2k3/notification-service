@@ -4,6 +4,7 @@ import com.example.notification_service.event.NotificationEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,6 +29,8 @@ import java.util.Map;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+    @Value("${kafka.url}")
+    private String url;
 
     private static final String[] PUBLIC_ENDPOINTS = {
         "/email/send"
@@ -73,7 +76,7 @@ public class SecurityConfig {
     @Bean
     public ConsumerFactory<String, NotificationEvent> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, url);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);

@@ -4,6 +4,7 @@ import com.example.notification_service.event.NotificationEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -18,7 +19,8 @@ import java.util.Map;
 
 @EnableKafka
 public class KafkaConfig {
-
+    @Value("${kafka.url}")
+    private String url;
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, NotificationEvent>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, NotificationEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
@@ -34,7 +36,7 @@ public class KafkaConfig {
     @Bean
     public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, url);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
         props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 1000);
         props.put(ProducerConfig.RECONNECT_BACKOFF_MS_CONFIG, 1000);

@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /notification
   max-http-request-header-size: 8MB
@@ -15,9 +15,10 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-
+dotenv:
+  enabled: true
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: ${URL_KAFKA}
     consumer:
       group-id: notification-verify-group
       auto-offset-reset: earliest
@@ -26,6 +27,15 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
         spring.json.value.default.type: com.example.notification_service.event.NotificationEvent
+kafka:
+  url: ${URL_KAFKA}
+brevo:
+  api:
+    key: ${API_KEY_EMAIL}
+mail:
+  name: ${MAIL_NAME}
+  api: ${API_MAIL}
+
 feign:
   hystrix:
     enabled: true  # Bật Hystrix cho Feign
